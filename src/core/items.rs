@@ -4,6 +4,11 @@ pub struct SolverResult {
     pub time: std::time::Duration,
 }
 
+pub struct Table {
+    pub table: Vec<Vec<(String, bool)>>,
+    pub time: std::time::Duration,
+}
+
 #[derive(PartialEq, Eq, Clone, Copy, Debug, PartialOrd, Ord)]
 pub enum Value {
     TRUE,

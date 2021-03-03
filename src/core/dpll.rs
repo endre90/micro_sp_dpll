@@ -1,6 +1,40 @@
-use crate::heuristics::*;
 use super::items::*;
-use std::time::Instant;
+use crate::heuristics::*;
+use std::time::{Duration, Instant};
+
+pub fn solve_all(formula: &Predicate, heuristic: &str) -> Table {
+    let mut table_vec = vec![];
+    let mut total_time = Duration::from_micros(0);
+    let mut mut_formula = formula.clone();
+    loop {
+        let result = solve_predicate(&mut_formula, &heuristic);
+        if result.sat {
+            table_vec.push(result.ass.clone());
+            total_time = total_time + result.time;
+            mut_formula = Predicate::AND(vec![
+                mut_formula,
+                Predicate::NOT(Box::new(Predicate::AND(
+                    result
+                        .ass
+                        .iter()
+                        .map(|x| match x.1 {
+                            true => Predicate::ATOM(Atom::new(&x.0, Value::UNNASIGNED)),
+                            false => Predicate::NOT(Box::new(Predicate::ATOM(Atom::new(
+                                &x.0,
+                                Value::UNNASIGNED,
+                            )))),
+                        })
+                        .collect(),
+                ))),
+            ])
+        } else {
+            break Table {
+                table: table_vec,
+                time: total_time,
+            };
+        }
+    }
+}
 
 pub fn solve_predicate(formula: &Predicate, heuristic: &str) -> SolverResult {
     let ts = crate::tseitin(&formula);
@@ -18,8 +52,18 @@ pub fn solve_dimacs(formula: &str, heuristic: &str) -> SolverResult {
 pub fn clean_result(res: &SolverResult) -> SolverResult {
     SolverResult {
         sat: res.sat,
-        ass: res.ass.iter().filter(|x| !x.0.starts_with("$")).map(|x| x.to_owned()).collect(),
-        time: res.time
+        ass: {
+            let mut result = res
+                .ass
+                .iter()
+                .filter(|x| !x.0.starts_with("$"))
+                .map(|x| x.to_owned())
+                .collect::<Vec<(String, bool)>>();
+            result.sort();
+            result.dedup();
+            result
+        },
+        time: res.time,
     }
 }
 
@@ -57,9 +101,8 @@ pub fn dpll(formula: &Vec<Vec<(String, bool)>>, heuristic: &str) -> SolverResult
         let mut updated_formula = vec![];
         updated_formula.extend(new_formula.clone());
         updated_formula.extend(vec![vec![new_literal.clone()]]);
-        
         let mut updated_assignments = vec![];
-        updated_assignments.extend(new_assignments.clone());        
+        updated_assignments.extend(new_assignments.clone());
 
         let sol = recursive(&updated_formula, heuristic, &updated_assignments, now);
         if sol.sat {
@@ -177,8 +220,10 @@ pub fn pure_literal_assign(
         let unipolar_literals: Vec<(String, bool)> = literals
             .iter()
             .filter(|x| {
-                (literals.contains(&(x.0.to_owned(), false)) && !literals.contains(&(x.0.to_owned(), true)))
-                    || (literals.contains(&(x.0.to_owned(), true)) && !literals.contains(&(x.0.to_owned(), false)))
+                (literals.contains(&(x.0.to_owned(), false))
+                    && !literals.contains(&(x.0.to_owned(), true)))
+                    || (literals.contains(&(x.0.to_owned(), true))
+                        && !literals.contains(&(x.0.to_owned(), false)))
             })
             .map(|x| x.to_owned())
             .collect();
@@ -207,10 +252,7 @@ pub fn pure_literal_assign(
 // Then we conjunct that literal to the current cnf formula so that the
 // unit propagation procedure and pure literal elimination prodedure can
 // again try to decide the prodlem.
-pub fn choose_literal(
-    formula: &Vec<Vec<(String, bool)>>,
-    heuristic: &str,
-) -> (String, bool) {
+pub fn choose_literal(formula: &Vec<Vec<(String, bool)>>, heuristic: &str) -> (String, bool) {
     match heuristic {
         "ran" => random::random(formula),
         "mo" => most_often::most_often(formula),

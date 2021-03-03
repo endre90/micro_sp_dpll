@@ -8,7 +8,7 @@ The input formula can be provided either in a DIMACS CNF format, or as an arbitr
 
 ### Ask for help
 ```
-cargo run --help
+cargo run -- --help
 ```
 
 ### Example 1
