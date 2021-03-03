@@ -1,4 +1,4 @@
-use crate::random;
+use crate::heuristics::*;
 use super::items::*;
 use std::time::Instant;
 
@@ -52,7 +52,7 @@ pub fn dpll(formula: &Vec<Vec<(String, bool)>>, heuristic: &str) -> SolverResult
                 time: time_to_solve,
             };
         };
-        let new_literal = choose_literal(&new_formula, &assignments, heuristic);
+        let new_literal = choose_literal(&new_formula, heuristic);
 
         let mut updated_formula = vec![];
         updated_formula.extend(new_formula.clone());
@@ -209,14 +209,13 @@ pub fn pure_literal_assign(
 // again try to decide the prodlem.
 pub fn choose_literal(
     formula: &Vec<Vec<(String, bool)>>,
-    assignments: &Vec<(String, bool)>,
     heuristic: &str,
 ) -> (String, bool) {
     match heuristic {
-        "ran" => random(formula, assignments),
-        // "mo" => most_often(formula),
-        // "jw" => jeroslow_wang(formula),
-        // "dlis" => dynamic_largest_individual_sum(formula),
+        "ran" => random::random(formula),
+        "mo" => most_often::most_often(formula),
+        "jw" => jeroslow_wang::jeroslow_wang(formula),
+        "dlis" => dlis::dlis(formula),
         _ => panic!("unknown heuristic"),
     }
 }

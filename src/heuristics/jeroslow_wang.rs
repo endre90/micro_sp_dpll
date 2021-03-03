@@ -2,14 +2,14 @@ use std::collections::HashMap;
 
 // This strategy gives higher priority to literals that appear
 // frequently in short clauses.
-pub fn jeroslow_wang(formula: &Vec<Vec<(u32, bool)>>) -> (u32, bool) {
-    fn count(formula: &Vec<Vec<(u32, bool)>>) -> HashMap<(u32, bool), u32> {
+pub fn jeroslow_wang(formula: &Vec<Vec<(String, bool)>>) -> (String, bool) {
+    fn count(formula: &Vec<Vec<(String, bool)>>) -> HashMap<(String, bool), u32> {
         let mut counter = HashMap::new();
         for clause in formula {
             for literal in clause {
                 if !counter.contains_key(literal) {
                     counter.insert(
-                        *literal,
+                        literal.to_owned(),
                         (2 as i32).pow(-(clause.len() as i32) as u32) as u32,
                     );
                 } else {
@@ -22,9 +22,10 @@ pub fn jeroslow_wang(formula: &Vec<Vec<(u32, bool)>>) -> (u32, bool) {
     }
 
     let counter = count(formula);
-    *counter
+    counter
         .iter()
         .max_by(|a, b| a.1.cmp(&b.1))
-        .unwrap_or((&(0 as u32, false), &0))
+        .unwrap()
         .0
+        .to_owned()
 }
