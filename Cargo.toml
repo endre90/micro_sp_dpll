@@ -1,0 +1,20 @@
+[package]
+name = "micro_sp_dpll"
+version = "0.1.0"
+authors = ["endre90 <endre90@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+structopt = "0.3.20"
+itertools = "0.10.0"
+rand = "0.8.3"
+
+[lib]
+name = "lib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "bin"
+path = "src/main.rs"
