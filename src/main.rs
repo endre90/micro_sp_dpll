@@ -3,41 +3,9 @@ use std::time::Duration;
 
 fn main() -> () {
 
-    // Write your test predicate here:
-
-    let x = Atom::new("x", Value::UNNASIGNED);
-    let y = Atom::new("y", Value::UNNASIGNED);
-    let z = Atom::new("z", Value::UNNASIGNED);
-    let w = Atom::new("w", Value::UNNASIGNED);
-
-    let test_predicate = Predicate::OR(
-        vec!(
-            Predicate::AND(
-                vec!(
-                    Predicate::ATOM(x.clone()),
-                    Predicate::NOT(
-                        Box::new(
-                            Predicate::ATOM(y)
-                        )
-                    )
-                )
-            ),
-            Predicate::OR(
-                vec!(
-                    Predicate::ATOM(z),
-                    Predicate::AND(
-                        vec!(
-                            Predicate::ATOM(x),
-                            Predicate::NOT(
-                                Box::new(
-                                    Predicate::ATOM(w)
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
+    let test_predicate = or!(
+        and!(atom!("x"), not!(atom!("y"))),
+        or!(atom!("z"), and!(atom!("x"), not!(atom!("w"))))
     );
 
     let ha = handle_args();
