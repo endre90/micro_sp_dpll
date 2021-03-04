@@ -37,16 +37,30 @@ pub fn solve_all(formula: &Predicate, heuristic: &str) -> Table {
 }
 
 pub fn solve_predicate(formula: &Predicate, heuristic: &str) -> SolverResult {
+    let now = Instant::now();
     let ts = crate::tseitin(&formula);
     let cnf = crate::predicate_cnf_to_dpll_cnf(&ts);
     let res = dpll(&cnf, heuristic);
-    clean_result(&res)
+    let clean_res = clean_result(&res);
+    let time_to_solve = now.elapsed();
+    SolverResult {
+        sat: clean_res.sat,
+        ass: clean_res.ass,
+        time: time_to_solve,
+    }
 }
 
 pub fn solve_dimacs(formula: &str, heuristic: &str) -> SolverResult {
+    let now = Instant::now();
     let dimacs = crate::dimacs_cnf_parser(formula);
     let res = dpll(&dimacs, heuristic);
-    clean_result(&res)
+    let clean_res = clean_result(&res);
+    let time_to_solve = now.elapsed();
+    SolverResult {
+        sat: clean_res.sat,
+        ass: clean_res.ass,
+        time: time_to_solve,
+    }
 }
 
 pub fn clean_result(res: &SolverResult) -> SolverResult {

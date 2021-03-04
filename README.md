@@ -23,3 +23,8 @@ cargo run --release
 ```
 cargo run --release -- -f dimacs -i /location/instance_name.cnf
 ```
+
+### To do maybe one day
+1. collect statistics
+2. encode to i32
+3. handle don't cares
