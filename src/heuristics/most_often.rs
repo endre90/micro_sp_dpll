@@ -1,8 +1,5 @@
 use std::collections::HashMap;
 
-// When the time comes to make a decision, choose the literal
-// that has the most appearance in the formula and and assign the
-// value of its current polarity to it.
 pub fn most_often(formula: &Vec<Vec<(String, bool)>>) -> (String, bool) {
     fn count(formula: &Vec<Vec<(String, bool)>>) -> HashMap<(String, bool), u32> {
         let mut counter = HashMap::new();

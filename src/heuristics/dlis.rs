@@ -1,13 +1,5 @@
 use std::collections::HashMap;
 
-// When the time comes to make a decision, choose the literal
-// that satisfies the largest number of currently unsatisfied
-// clauses. For a given variable x:
-//     C(x,p) = number of clauses in which x appears positively
-//     C(x,n) = number of clauses in which x appears negatively
-// find a variable a such that C(a,p) is max, a variable b such that C(b,n) is max
-// if C(a,p) > C(b,n),
-//     assign a to TRUE and return, else assign b to FALSE and return
 pub fn dlis(formula: &Vec<Vec<(String, bool)>>) -> (String, bool) {
     let mut pos_counter = HashMap::new();
     let mut neg_counter = HashMap::new();

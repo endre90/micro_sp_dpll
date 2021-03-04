@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-// This strategy gives higher priority to literals that appear
-// frequently in short clauses.
 pub fn jeroslow_wang(formula: &Vec<Vec<(String, bool)>>) -> (String, bool) {
     fn count(formula: &Vec<Vec<(String, bool)>>) -> HashMap<(String, bool), u32> {
         let mut counter = HashMap::new();

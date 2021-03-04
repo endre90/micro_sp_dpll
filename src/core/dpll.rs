@@ -120,19 +120,6 @@ pub fn dpll(formula: &Vec<Vec<(String, bool)>>, heuristic: &str) -> SolverResult
     recursive(formula, heuristic, &assignments, now)
 }
 
-// The procedure is based on unit clauses, i.e. clauses that are composed
-// of a single literal. Because each clause needs to be satisfied, we know
-// that this literal must be true. If a set of clauses contains the unit
-// clause l, the other clauses are simplified by the application of the
-// two following rules:
-//     1. every clause containing l is removed (the clause is satisfied if l is);
-//     2. in every clause that contains neg l, this literal is deleted from the clause
-//        (neg l can not contribute to it being satisfied).
-// The application of these two rules lead to a new set of clauses that
-// is equisatisfiable with the original. Unit propagation can sometimed even decide
-// the problem (try test 5). If the returned formula is empty, the formula is SAT
-// for the given assignments. If the formula contains an empty clause, the formula
-// is UNSAT.
 pub fn unit_propagate(
     formula: &Vec<Vec<(String, bool)>>,
     assignments: &Vec<(String, bool)>,
@@ -195,10 +182,6 @@ pub fn unit_propagate(
     recursive(formula, final_partial)
 }
 
-// If a propositional variable occurs with only one polarity in the formula,
-// it is called pure. Pure literals can always be assigned in a way that makes
-// all clauses containing them true. Thus, these clauses do not constrain the
-// search anymore and can be deleted.
 pub fn pure_literal_assign(
     formula: &Vec<Vec<(String, bool)>>,
     assignments: &Vec<(String, bool)>,
@@ -247,11 +230,6 @@ pub fn pure_literal_assign(
     recursive(formula, final_unipolar_literals)
 }
 
-// When unit propagation and pure literal elimination can do no more,
-// we have to choose one literal from the formula and assign a polarity.
-// Then we conjunct that literal to the current cnf formula so that the
-// unit propagation procedure and pure literal elimination prodedure can
-// again try to decide the prodlem.
 pub fn choose_literal(formula: &Vec<Vec<(String, bool)>>, heuristic: &str) -> (String, bool) {
     match heuristic {
         "ran" => random::random(formula),
