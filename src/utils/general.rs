@@ -33,12 +33,3 @@ pub fn handle_args() -> Args {
         all: args.all
     }
 }
-
-pub trait IterOps<T, I>: IntoIterator<Item = T>
-where
-    I: IntoIterator<Item = T>,
-    T: PartialEq,
-{
-    fn intersect(self, other: I) -> Vec<T>;
-    fn difference(self, other: I) -> Vec<T>;
-}
