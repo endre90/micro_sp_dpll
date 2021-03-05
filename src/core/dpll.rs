@@ -18,11 +18,8 @@ pub fn solve_all(formula: &Predicate, heuristic: &str) -> Table {
                         .ass
                         .iter()
                         .map(|x| match x.1 {
-                            true => Predicate::ATOM(Atom::new(&x.0, Value::UNNASIGNED)),
-                            false => Predicate::NOT(Box::new(Predicate::ATOM(Atom::new(
-                                &x.0,
-                                Value::UNNASIGNED,
-                            )))),
+                            true => Predicate::ATOM(x.0.clone()),
+                            false => Predicate::NOT(Box::new(Predicate::ATOM(x.0.clone()))),
                         })
                         .collect(),
                 ))),

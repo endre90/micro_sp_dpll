@@ -9,40 +9,18 @@ pub struct Table {
     pub time: std::time::Duration,
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug, PartialOrd, Ord)]
-pub enum Value {
-    TRUE,
-    FALSE,
-    UNNASIGNED,
-}
-
-#[derive(PartialEq, Clone, Debug, Eq, PartialOrd, Ord)]
-pub struct Atom {
-    pub name: String,
-    pub value: Value,
-}
-
-impl Atom {
-    pub fn new(name: &str, value: Value) -> Atom {
-        Atom {
-            name: name.to_owned(),
-            value: value,
-        }
-    }
-}
-
 #[derive(Debug, PartialEq, Clone, Eq, Ord, PartialOrd)]
 pub enum Predicate {
     NOT(Box<Predicate>),
     AND(Vec<Predicate>),
     OR(Vec<Predicate>),
-    ATOM(Atom),
+    ATOM(String),
 }
 
 #[macro_export]
 macro_rules! atom {
     ($a:expr) => {
-        Predicate::ATOM(Atom::new($a, Value::UNNASIGNED))
+        Predicate::ATOM($a)
     };
 }
 

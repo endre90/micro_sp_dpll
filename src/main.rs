@@ -3,9 +3,14 @@ use std::time::Duration;
 
 fn main() -> () {
 
+    let x = atom!("x".to_string());
+    let y = atom!("y".to_string());
+    let z = atom!("z".to_string());
+    let w = atom!("w".to_string());
+
     let test_predicate = or!(
-        and!(atom!("x"), not!(atom!("y"))),
-        or!(atom!("z"), and!(atom!("x"), not!(atom!("w"))))
+        and!(x.clone(), not!(y)),
+        or!(z, and!(x, not!(w)))
     );
 
     let ha = handle_args();

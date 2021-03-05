@@ -4,7 +4,7 @@ use super::*;
 pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
     let mut auxes = vec![];
     let mut cnf = vec![];
-    fn recursive(pred: &Predicate, auxes: &mut Vec<Atom>, cnf: &mut Vec<Predicate>) -> () {
+    fn recursive(pred: &Predicate, auxes: &mut Vec<String>, cnf: &mut Vec<Predicate>) -> () {
         match pred {
             Predicate::ATOM(_) => cnf.push(Predicate::OR(vec![pred.clone()])),
 
@@ -25,22 +25,10 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                 }
                 _ => {
                     if auxes.len() == 0 {
-                        let aux_atom_0 = Predicate::ATOM(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
-                        auxes.push(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
-                        let aux_atom_1 = Predicate::ATOM(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
-                        auxes.push(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
+                        let aux_atom_0 = Predicate::ATOM(format!("$aux{}", auxes.len()));
+                        auxes.push(format!("$aux{}", auxes.len()));
+                        let aux_atom_1 = Predicate::ATOM(format!("$aux{}", auxes.len()));
+                        auxes.push(format!("$aux{}", auxes.len()));
                         cnf.push(Predicate::OR(vec![aux_atom_0.clone()]));
                         cnf.push(Predicate::OR(vec![
                             Predicate::NOT(Box::new(aux_atom_0.clone())),
@@ -49,14 +37,8 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                         cnf.push(Predicate::OR(vec![aux_atom_0, aux_atom_1]));
                     } else {
                         let aux_atom_0 = Predicate::ATOM(auxes.last().unwrap().clone());
-                        let aux_atom_1 = Predicate::ATOM(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
-                        auxes.push(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
+                        let aux_atom_1 = Predicate::ATOM(format!("$aux{}", auxes.len()));
+                        auxes.push(format!("$aux{}", auxes.len()));
                         cnf.push(Predicate::OR(vec![
                             Predicate::NOT(Box::new(aux_atom_0.clone())),
                             Predicate::NOT(Box::new(aux_atom_1.clone())),
@@ -72,14 +54,8 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                 1 => recursive(&p[0], auxes, cnf),
                 _ => {
                     if auxes.len() == 0 {
-                        let aux_atom_0 = Predicate::ATOM(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
-                        auxes.push(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
+                        let aux_atom_0 = Predicate::ATOM(format!("$aux{}", auxes.len()));
+                        auxes.push(format!("$aux{}", auxes.len()));
                         cnf.push(Predicate::OR(vec![aux_atom_0.clone()]));
                         let mut disj = vec![];
                         for z in p {
@@ -92,14 +68,9 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                                     disj.push(Predicate::NOT(Box::new(Predicate::ATOM(x.clone()))));
                                 }
                                 _ => {
-                                    let aux_atom_1 = Predicate::ATOM(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
-                                    auxes.push(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
+                                    let aux_atom_1 =
+                                        Predicate::ATOM(format!("$aux{}", auxes.len()));
+                                    auxes.push(format!("$aux{}", auxes.len()));
                                     cnf.push(Predicate::OR(vec![
                                         Predicate::NOT(Box::new(aux_atom_0.clone())),
                                         aux_atom_1.clone(),
@@ -128,14 +99,9 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                                     disj.push(Predicate::NOT(Box::new(Predicate::ATOM(x.clone()))));
                                 }
                                 _ => {
-                                    let aux_atom_1 = Predicate::ATOM(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
-                                    auxes.push(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
+                                    let aux_atom_1 =
+                                        Predicate::ATOM(format!("$aux{}", auxes.len()));
+                                    auxes.push(format!("$aux{}", auxes.len()));
                                     cnf.push(Predicate::OR(vec![
                                         Predicate::NOT(Box::new(aux_atom_0.clone())),
                                         aux_atom_1.clone(),
@@ -160,14 +126,8 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                 1 => recursive(&p[0], auxes, cnf),
                 _ => {
                     if auxes.len() == 0 {
-                        let aux_atom_0 = Predicate::ATOM(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
-                        auxes.push(Atom::new(
-                            &format!("$aux{}", auxes.len()),
-                            Value::UNNASIGNED,
-                        ));
+                        let aux_atom_0 = Predicate::ATOM(format!("$aux{}", auxes.len()));
+                        auxes.push(format!("$aux{}", auxes.len()));
                         cnf.push(Predicate::OR(vec![aux_atom_0.clone()]));
                         let mut disj = vec![];
                         for z in p {
@@ -180,14 +140,9 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                                     disj.push(Predicate::ATOM(x.clone()));
                                 }
                                 _ => {
-                                    let aux_atom_1 = Predicate::ATOM(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
-                                    auxes.push(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
+                                    let aux_atom_1 =
+                                        Predicate::ATOM(format!("$aux{}", auxes.len()));
+                                    auxes.push(format!("$aux{}", auxes.len()));
                                     cnf.push(Predicate::OR(vec![
                                         aux_atom_0.clone(),
                                         Predicate::NOT(Box::new(aux_atom_1.clone())),
@@ -216,14 +171,9 @@ pub fn tseitin(pred: &Predicate) -> Vec<Predicate> {
                                     disj.push(Predicate::ATOM(x.clone()));
                                 }
                                 _ => {
-                                    let aux_atom_1 = Predicate::ATOM(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
-                                    auxes.push(Atom::new(
-                                        &format!("$aux{}", auxes.len()),
-                                        Value::UNNASIGNED,
-                                    ));
+                                    let aux_atom_1 =
+                                        Predicate::ATOM(format!("$aux{}", auxes.len()));
+                                    auxes.push(format!("$aux{}", auxes.len()));
                                     cnf.push(Predicate::OR(vec![
                                         aux_atom_0.clone(),
                                         Predicate::NOT(Box::new(aux_atom_1.clone())),
@@ -255,9 +205,9 @@ pub fn predicate_cnf_to_dpll_cnf(formula: &Vec<Predicate>) -> Vec<Vec<(String, b
             Predicate::OR(y) => y
                 .iter()
                 .map(|z| match z {
-                    Predicate::ATOM(k) => (k.name.to_owned(), true),
+                    Predicate::ATOM(k) => (k.to_owned(), true),
                     Predicate::NOT(k) => match &**k {
-                        Predicate::ATOM(l) => (l.name.to_owned(), false),
+                        Predicate::ATOM(l) => (l.to_owned(), false),
                         _ => panic!("BAD TSEITIN TRANSFORMATION 1"),
                     },
                     _ => panic!("BAD TSEITIN TRANSFORMATION 2"),
