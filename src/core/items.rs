@@ -14,13 +14,13 @@ pub enum Predicate {
     NOT(Box<Predicate>),
     AND(Vec<Predicate>),
     OR(Vec<Predicate>),
-    ATOM(String),
+    VAR(String),
 }
 
 #[macro_export]
 macro_rules! atom {
     ($a:expr) => {
-        Predicate::ATOM($a)
+        Predicate::VAR($a)
     };
 }
 
