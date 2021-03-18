@@ -11,10 +11,3 @@ structopt = "0.3.20"
 itertools = "0.10.0"
 rand = "0.8.3"
 
-[lib]
-name = "lib"
-path = "src/lib.rs"
-
-[[bin]]
-name = "bin"
-path = "src/main.rs"

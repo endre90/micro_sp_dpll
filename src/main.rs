@@ -1,4 +1,4 @@
-use lib::*;
+use micro_sp_dpll::*;
 use std::time::Duration;
 
 fn main() -> () {
