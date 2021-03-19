@@ -3,13 +3,13 @@ use std::time::Duration;
 
 fn main() -> () {
 
-    let x = atom!("x".to_string());
-    let y = atom!("y".to_string());
-    let z = atom!("z".to_string());
-    let w = atom!("w".to_string());
+    let x = var!("x");
+    let y = var!("y");
+    let z = var!("z");
+    let w = var!("w");
 
     let test_predicate = or!(
-        and!(x.clone(), not!(y)),
+        and!(x, not!(y)),
         or!(z, and!(x, not!(w)))
     );
 

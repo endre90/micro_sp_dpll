@@ -18,9 +18,9 @@ pub enum Predicate {
 }
 
 #[macro_export]
-macro_rules! atom {
+macro_rules! var {
     ($a:expr) => {
-        Predicate::VAR($a)
+        Predicate::VAR($a.to_owned())
     };
 }
 
@@ -34,13 +34,13 @@ macro_rules! not {
 #[macro_export]
 macro_rules! and {
     ($a:expr) => {
-        Predicate::AND($a)
+        Predicate::AND($a.to_owned())
     };
     ($( $x:expr ),* ) => {
         {
             let mut temp_vec = Vec::new();
             $(
-                temp_vec.push($x);
+                temp_vec.push($x.to_owned());
             )*
             Predicate::AND(temp_vec)
         }
@@ -50,13 +50,13 @@ macro_rules! and {
 #[macro_export]
 macro_rules! or {
     ($a:expr) => {
-        Predicate::OR($a)
+        Predicate::OR($a.to_owned())
     };
     ($( $x:expr ),* ) => {
         {
             let mut temp_vec: Vec<Predicate> = Vec::new();
             $(
-                temp_vec.push($x);
+                temp_vec.push($x.to_owned());
             )*
             Predicate::OR(temp_vec)
         }
