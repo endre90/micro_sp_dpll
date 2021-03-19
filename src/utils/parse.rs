@@ -19,11 +19,15 @@ pub fn dimacs_cnf_parser(name: &str) -> Vec<Vec<(String, bool)>> {
             None => "NONE",
         };
         if next_instance_line != "NONE" {
-            if next_instance_line.starts_with("c ") {
+            if next_instance_line.starts_with("c") {
+                ()
+            } else if next_instance_line.starts_with("%") {
+                ()
+            } else if next_instance_line.starts_with("0") {
                 ()
             } else if next_instance_line.starts_with("p cnf") {
                 let stats: Vec<String> = next_instance_line
-                    .split(|c| c == ' ')
+                    .split_whitespace()
                     .filter(|x| *x != "p" && *x != "cnf")
                     .map(|x| x.to_owned())
                     .collect();
@@ -35,7 +39,7 @@ pub fn dimacs_cnf_parser(name: &str) -> Vec<Vec<(String, bool)>> {
                 match next_instance_line.ends_with(" 0") {
                     true => {
                         let clause = next_instance_line
-                            .split(|c| c == ' ')
+                            .split_whitespace()
                             .filter(|x| *x != "0")
                             .map(|y| match y.parse::<i32>().unwrap() >= 0 {
                                 true => (y.parse::<i32>().unwrap().abs().to_string(), true),
