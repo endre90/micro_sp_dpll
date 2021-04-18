@@ -6,6 +6,9 @@ Read about DPLL here: https://en.wikipedia.org/wiki/DPLL_algorithm
 
 The input formula can be provided either in a DIMACS CNF format, or as an arbitrary predicate. In the latter case, Tseitin's transformation is applied to transform the formula into CNF. Read about Tseitin's transformation here: https://en.wikipedia.org/wiki/Tseytin_transformation
 
+### Requirements:
+1. [Rust](https://rustup.rs/)
+
 ### Ask for help
 ```
 cargo run -- --help
